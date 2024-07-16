@@ -31,10 +31,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # --------- LOCAL APPS ------------
+    # --------- EXTERNAL APPS ------------
     'accounts',
     'server',
     # -------- PLUG-INS ---------------
+    'drf_spectacular',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -122,4 +124,19 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # --------- CUSTOM SETTINGS ------------
 AUTH_USER_MODEL = 'accounts.Account'
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',  # Default authentication method of Django
+    ],
+}
+
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Django API',  # Your project's API
+    'DESCRIPTION': 'API for Django',    # Your project's description
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': True,
+}
 
