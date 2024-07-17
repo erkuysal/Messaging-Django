@@ -24,7 +24,7 @@ class ServerSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        num_members = self.context.get("num_members")
+        num_members = self.context.get("num_members")  # Correlating the context with the view
         if not num_members:
             data.pop("num_members", None)
         return data
