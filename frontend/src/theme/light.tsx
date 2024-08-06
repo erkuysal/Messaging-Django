@@ -8,8 +8,14 @@ declare module "@mui/material/styles" {
         primaryDraw:{
             width: number;
             closed: number;
-        }
+        },
+        secondaryDraw:{
+            width: number;
+        },
     }
+
+// ----------------------------------------------
+
     interface ThemeOptions {
         primaryAppBar:{         // primaryAppBar? : Question mark indicates optional property
             height: number;
@@ -17,7 +23,10 @@ declare module "@mui/material/styles" {
         primaryDraw:{
             width: number;
             closed: number;
-        }
+        },
+        secondaryDraw:{
+            width: number;
+        },
     }
 }
 
@@ -33,6 +42,9 @@ export const createMuiTheme = () => {
       primaryDraw: {
         width: 240,
         closed: 70,
+      },
+      secondaryDraw:{
+            width: 240,
       },
       // OVERRIDES
       components:{
