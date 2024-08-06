@@ -1,7 +1,8 @@
-import {Box, Drawer, Typography, useMediaQuery} from "@mui/material";
+import {Box, styled, Typography, useMediaQuery} from "@mui/material";
 import {useEffect, useState} from "react";
 import {useTheme} from "@mui/material/styles";
 import DrawToggle from "../../components/PrimaryDraw/DrawToggle.tsx";
+import MuiDrawer from "@mui/material/Drawer";
 
 const PrimaryDraw = () => {
    const theme = useTheme();
@@ -24,6 +25,21 @@ const PrimaryDraw = () => {
       overflowX: "hidden",
       width: theme.primaryDraw.closed,
    });
+
+   const Drawer = styled(MuiDrawer, {}) (({theme, open}) => ({
+      width: theme.primaryDraw.width,
+      whiteSpace: "nowrap",
+      boxSizing: "border-box",
+      ...(open && {
+         ...openedMixin(),
+         "& .MuiDrawer-paper": openedMixin(),
+      }),
+      ...(!open && {
+         ...openedMixin(),
+         "& .MuiDrawer-paper": closedMixin(),
+      }),
+   }));
+
 
    console.log(below600)
 
