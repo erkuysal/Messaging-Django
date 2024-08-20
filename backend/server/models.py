@@ -54,15 +54,6 @@ class Server(models.Model):
     member = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='server_member')
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"{self.name} - {self.id}"
-
-
-class Channel(models.Model):
-    name = models.CharField(max_length=50)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='channel_owner')
-    topic = models.CharField(max_length=100)
-    server = models.ForeignKey(Server, on_delete=models.CASCADE, related_name='channel_server')
     banner = models.ImageField(
         upload_to=server_banner_upload_path,
         null=True, blank=True,
@@ -77,20 +68,30 @@ class Channel(models.Model):
     def save(self, *args, **kwargs):
         self.name = self.name.lower()
         if self.id:  # if the object is already created
-            existing = get_object_or_404(Channel, id=self.id)
+            existing = get_object_or_404(Server, id=self.id)
             if existing.icon != self.icon:
                 existing.icon.delete(save=False)
             if existing.banner != self.banner:
                 existing.banner.delete(save=False)
-        super(Channel, self).save(*args, **kwargs)
+        super(Server, self).save(*args, **kwargs)
 
     @receiver(models.signals.pre_delete, sender='server.Server')
-    def category_delete_files(sender, instance, **kwargs):
+    def server_delete_files(sender, instance, **kwargs):
         for field in instance._meta.fields:
             if field.name == 'icon' or field.name == 'banner':
                 file = getattr(instance, field.name)
                 if file:
                     file.delete(save=False)
+
+    def __str__(self):
+        return f"{self.name} - {self.id}"
+
+
+class Channel(models.Model):
+    name = models.CharField(max_length=50)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='channel_owner')
+    topic = models.CharField(max_length=100)
+    server = models.ForeignKey(Server, on_delete=models.CASCADE, related_name='channel_server')
 
     def __str__(self):
         return self.name
