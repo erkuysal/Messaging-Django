@@ -34,6 +34,12 @@ export const createMuiTheme = () => {
   let theme = createTheme({
       typography:{
         fontFamily: ["Silkscreen", "sans-serif", "VT323", "monospace"].join(","),
+        body1:{
+          fontSize: "1.1rem",
+          fontWeight: 500,
+          letterSpacing: "-0.25px",
+          color: "#333",
+        },
       },
       // COMPONENTS
       primaryAppBar: {

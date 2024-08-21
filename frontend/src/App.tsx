@@ -3,12 +3,14 @@ import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider} fr
 import Home from "./pages/Home";
 import {ThemeProvider} from "@mui/material";
 import {createMuiTheme} from "./theme/light";
+import {Explore} from "@mui/icons-material";
 
 // Router Configurations
 const Router = createBrowserRouter(
     createRoutesFromElements(
         <Route>
             <Route path={"/"} element={<Home />} />
+            <Route path={"/explore/:categoryName"} element={<Explore />} />
             {/*<Route path={"/route1"} element={<Home />} />*/}
             {/*<Route path={"/route2"} element={<Home />} />*/}
             {/*<Route path={"/route3"} element={<Home />} />*/}
