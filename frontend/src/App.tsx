@@ -1,9 +1,10 @@
 import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider} from "react-router-dom";
 
-import Home from "./pages/Home";
 import {ThemeProvider} from "@mui/material";
 import {createMuiTheme} from "./theme/light";
-import {Explore} from "@mui/icons-material";
+
+import Home from "./pages/Home";
+import Explore from "./pages/Explore";
 
 // Router Configurations
 const Router = createBrowserRouter(

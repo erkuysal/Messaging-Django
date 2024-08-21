@@ -29,6 +29,7 @@ interface Server {
 
 const ExploreServer = () => {
     const { categoryName } = useParams(); // related with App.tsx line 13
+    
 
     return <></>;
 }
