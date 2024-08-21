@@ -8,6 +8,7 @@ import Main from "./templates/Main";
 
 import PopularChannels from "../components/PrimaryDraw/PopularChannels.tsx";
 import ExploreCategories from "../components/SecondaryDraw/ExploreCategories.tsx";
+import ExploreServers from "../components/Main/ExploreServers.tsx";
 
 // funtion Home() {}  : is same as using down below
 const Home = () => {
@@ -21,7 +22,9 @@ const Home = () => {
             <SecondaryDraw>
                 <ExploreCategories/>
             </SecondaryDraw>
-            <Main/>
+            <Main>
+                <ExploreServers/>
+            </Main>
         </Box>
     );
 };

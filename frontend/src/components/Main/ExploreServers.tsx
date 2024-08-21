@@ -29,9 +29,28 @@ interface Server {
 
 const ExploreServer = () => {
     const { categoryName } = useParams(); // related with App.tsx line 13
-    
+    const url = categoryName ? `/server/category/?category=${categoryName}` : "/server/select"
+    const {dataCRUD, fetchData} = useCrud<Server>([], url)
 
-    return <></>;
+    useEffect(() => {
+         fetchData();
+
+    }, [categoryName]);
+
+    return <>
+        <Container maxWidth="lg">
+            <Box sx={{ pt:1 }}>
+                <Typography variant="h3" noWrap component="h2" color="textSecondary"
+                            sx={{display:{sm:"block", fontWeight:500, fontSize:"48px", letterSpacing:"-1px"},
+                            textAlign:{xs :"center", sm:"left"}
+                            }}>
+                    { categoryName
+                        ? `All About ${categoryName}`
+                        : "Were you looking for something?"}
+                </Typography>
+            </Box>
+        </Container>
+    </>;
 }
 
 export default ExploreServer;
