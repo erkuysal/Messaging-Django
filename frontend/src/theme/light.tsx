@@ -40,6 +40,12 @@ export const createMuiTheme = () => {
           letterSpacing: "-0.25px",
           color: "#333",
         },
+        body2:{
+            fontSize: "0.85rem",
+            fontWeight: 500,
+            letterSpacing: "-0.5px",
+            color: "#333",
+        },
       },
       // COMPONENTS
       primaryAppBar: {
