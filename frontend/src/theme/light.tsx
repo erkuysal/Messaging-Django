@@ -30,7 +30,7 @@ declare module "@mui/material/styles" {
     }
 }
 
-export const createMuiTheme = () => {
+export const createMuiTheme = (mode: "light" | "dark") => {
   let theme = createTheme({
       typography:{
         fontFamily: ["Silkscreen", "sans-serif", "VT323", "monospace"].join(","),
@@ -57,6 +57,9 @@ export const createMuiTheme = () => {
       },
       secondaryDraw:{
             width: 240,
+      },
+      palette: {
+          mode,
       },
       // OVERRIDES
       components:{

@@ -4,6 +4,7 @@ import {useTheme} from "@mui/material/styles";
 import {useEffect, useState} from "react";
 
 import ExploreCategories from "../../components/SecondaryDraw/ExploreCategories.tsx";
+import AccountButton from "../../components/PrimaryAppBar/DarkMode/AccountButton.tsx";
 
 const PrimaryAppBar = () => {
     const [sideMenu, setSideMenu] = useState(false);
@@ -68,6 +69,9 @@ const PrimaryAppBar = () => {
                         MESSAGE
                     </Typography>
                 </Link>
+
+                <Box sx={{flexGrow:1}}></Box>
+                <AccountButton/>
 
             </Toolbar>
         </AppBar>

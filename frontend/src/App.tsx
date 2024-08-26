@@ -2,6 +2,7 @@ import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider} fr
 
 import {ThemeProvider} from "@mui/material";
 import {createMuiTheme} from "./theme/light";
+import ToggleTheme from "./theme/ToggleTheme";
 
 import Home from "./pages/Home";
 import Explore from "./pages/Explore";
@@ -21,12 +22,11 @@ const Router = createBrowserRouter(
 );
 
 const App: React.FC = () => {
-    const theme = createMuiTheme();
 
     return (
-        <ThemeProvider theme={theme}>
+        <ToggleTheme>
             <RouterProvider router={Router}/>;
-        </ThemeProvider>
+        </ToggleTheme>
     )
 };
 
