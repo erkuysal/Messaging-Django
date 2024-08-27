@@ -127,10 +127,12 @@ MEDIA_URL = 'media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# ----------------------------------------- CUSTOM SETTINGS ----------------------------------------------------
+# ---------------------------------------------- CUSTOM SETTINGS ----------------------------------------------------
+
 AUTH_USER_MODEL = 'accounts.Account'
 
-# --------- REST FRAMEWORK SETTINGS ------------
+# ----------------------------- REST FRAMEWORK SETTINGS --------------------------------
+
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -151,3 +153,20 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
 ]
 
+# ------------------------ CHANNELS / ASGI SETTINGS -----------------------
+CHANNEL_LAYERS = {      # For Development
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
+
+"""
+CHANNEL_LAYERS = {     # For Production
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
+"""
