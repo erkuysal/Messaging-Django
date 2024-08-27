@@ -13,7 +13,7 @@ from . import urls
 application = ProtocolTypeRouter(
     {
         "http": get_asgi_application(),
-        # "websocket": URLRouter(urls.websocket_urlpatterns),
+        "websocket": URLRouter(urls.websocket_urlpatterns),
     }
 )
 
