@@ -14,7 +14,7 @@ from .serializer import CategorySerializer, ServerSerializer
 class ServerListViewSet(viewsets.ViewSet):
 
     queryset = Server.objects.all()
-    #permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     @server_list_docs
     def list(self, request):
@@ -69,8 +69,8 @@ class ServerListViewSet(viewsets.ViewSet):
             self.queryset = self.queryset.annotate(num_members=Count('member'))
 
         if by_serverid:
-            if not request.user.is_authenticated:
-                raise AuthenticationFailed(detail="You must be authenticated to access this resource")
+            # if not request.user.is_authenticated:
+            #     raise AuthenticationFailed(detail="You must be authenticated to access this resource")
 
             try:
                 self.queryset = self.queryset.filter(id=by_serverid)

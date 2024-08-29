@@ -11,12 +11,8 @@ const Router = createBrowserRouter(
     createRoutesFromElements(
         <Route>
             <Route path={"/"} element={<Home />} />
-            <Route path={"/server"} element={<Server />} />
+            <Route path={"/server/:serverId/:channelId?"} element={<Server />} />
             <Route path={"/explore/:categoryName"} element={<Explore />} />
-            {/*<Route path={"/route1"} element={<Home />} />*/}
-            {/*<Route path={"/route2"} element={<Home />} />*/}
-            {/*<Route path={"/route3"} element={<Home />} />*/}
-            {/*<Route path={"/route4"} element={<Home />} />*/}
         </Route>
     )
 );
