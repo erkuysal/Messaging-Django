@@ -1,37 +1,24 @@
 import {
     List, ListItem, ListItemButton, ListItemText,
-    Box, useTheme, ListItemIcon, Typography,
+    Box, useTheme, Typography,
 } from "@mui/material";
-import {ListItemAvatar} from "@mui/material";
 
-import {useEffect} from "react";
-import {Link} from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
-import useCrud from "../../hooks/useCrud.ts";
-import {MEDIA_URL} from "../../config.ts";
-import getTextDecoration from "@mui/material/Link/getTextDecoration";
+import {Server} from "../../@types/server";
 
 
-interface Category {
-    id: number;
-    name: string;
-    description: string;
-    icon: string;
+interface ServerChannelsProps {
+    data: Server[];
 }
 
-const ServerChannels = () => {
+const ServerChannels = (props: ServerChannelsProps) => {
     const theme = useTheme();
+    const server_name = props.data?.[0]?.name ?? "Server";
 
-    const isDarkMode = theme.palette.mode === "dark";
-
-    const {dataCRUD, error, isLoading, fetchData} = useCrud<Category>(
-        [],
-        "/server/category/");
-
-
-    useEffect(() => {
-        fetchData();
-    }, []);
+    const {data} = props;
+    // console.log(data)
+    const {serverId} = useParams();
 
     return <>
         <Box
@@ -40,25 +27,21 @@ const ServerChannels = () => {
                 px: 2, borderBottom: `1px solid ${theme.palette.divider}`,
                 position: "sticky", top: 0, backgroundColor: theme.palette.background.default,
             }}>
-            Explore
+            <Typography variant="body1" style={{textOverflow: "ellipsis", overflow:"hidden", whiteSpace:"nowrap"}}>
+                {server_name}
+            </Typography>
         </Box>
 
         <List sx={{py: 0}}>
-            {dataCRUD.map((item) => (
-                <ListItem disablePadding key={item.id} sx={{display: "block"}} dense={true}>
-                    <Link to={`/explore/${item.name}`} style={{textDecoration: "none"}}>
+            {data.flatMap((obj) =>
+            obj.channel_server.map((item) => (
+                <ListItem disablePadding key={item.id}
+                          sx={{display: "block", maxHeight: "40px"}}
+                          dense={true}>
+                    <Link
+                        to={`/server/${serverId}/${item.id}`}
+                        style={{textDecoration: "none"}}>
                         <ListItemButton sx={{minHeight: 48}}>
-
-                            <ListItemIcon sx={{minWidth: 0, justifyContent: "center"}}>
-                                <ListItemAvatar sx={{minWidth: "0px"}}>
-                                    <img alt={"server Icon"} src={`${MEDIA_URL}${item.icon}`}
-                                         style={{
-                                             width: "25px", height: "25px", display: "block", margin: "auto",
-                                             filter: isDarkMode ? "invert(1)" : "invert(0)",
-                                         }}
-                                    />
-                                </ListItemAvatar>
-                            </ListItemIcon>
 
                             <ListItemText
                                 primary={<Typography
@@ -66,10 +49,10 @@ const ServerChannels = () => {
                                 </Typography>}
                             />
 
-
                         </ListItemButton>
                     </Link>
                 </ListItem>
+            )
             ))}
         </List>
     </>

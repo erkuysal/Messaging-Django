@@ -5,10 +5,10 @@ import {
 import {ListItemAvatar} from "@mui/material";
 import {Avatar} from "@mui/material";
 
-import {useEffect} from "react";
+// import {useEffect} from "react";
 import {Link} from "react-router-dom";
 
-import useCrud from '../../hooks/useCrud';
+// import useCrud from '../../hooks/useCrud';
 import { MEDIA_URL } from "../../config.ts";
 
 interface Server {
@@ -18,19 +18,15 @@ interface Server {
     icon: string;
 }
 
+interface ServerChannelsProps {
+    data: Server[];
+}
 
 type Props = {
   open: boolean;
 };
 
-const UserServers: React.FC = ({ open }) => {
-    const { dataCRUD, error, isLoading, fetchData } = useCrud<Server>(
-        [],
-        "/server/select/?by_serverid=1");
-
-    useEffect(() => {
-        fetchData();
-    }, []);
+const UserServers: React.FC< Props & ServerChannelsProps > = ({ open, data }) => {
 
     return <>
     <Box sx={{
@@ -45,7 +41,7 @@ const UserServers: React.FC = ({ open }) => {
 
     </Box>
     <List>
-        {dataCRUD.map((item) => (
+        {data.map((item) => (
             <ListItem key={item.id}
                       disablePadding
                       sx={{display: "block"}}

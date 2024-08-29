@@ -13,32 +13,47 @@ import UserServers from "../components/PrimaryDraw/UserServers.tsx";
 
 import useCrud from "../hooks/useCrud.ts";
 
+import { Server } from "../@types/server"
+import {useEffect} from "react";
+
 const Server = () => {
     const navigate = useNavigate();
-    const { serverId, channelId } = useParams()
+    const { serverId, channelId } = useParams();
 
-    const {dataCRUD, error, isLoading, fetchData} = useCrud<Server>(
-        [],
-        `/server/select/?by_serverid=${serverId}`
-    )
+    const { dataCRUD, error, isLoading, fetchData } = useCrud<Server>(
+    [],
+    `/server/select/?by_serverid=${serverId}`
+    );
 
     if (error !== null && error.message === "400") {
         navigate("/")
         return null;
     }
 
+    useEffect(() => {
+        fetchData();
+    }, []);
+
     // Check if the channelId is valid by searching for it in the data fetched from API.
-    // const isChannel = (): boolean => {
-    //     if(!channelId) {
-    //         return true;
-    //     }
-    //
-    //     return dataCRUD.some((server) =>
-    //         server.channel_server.some(
-    //             (channel) => channel.id === parseInt(channelId)
-    //         )
-    //     )
-    // }
+    const isChannel = (): boolean => {
+        if(!channelId) {
+            return true;
+        }
+
+        return dataCRUD.some((server) =>
+            server.channel_server.some(
+                (channel) => channel.id === parseInt(channelId)
+            )
+        )
+    }
+
+    useEffect(() => {
+        if(! isChannel())
+        {
+            navigate(`/server/${serverId}`)
+        }
+    }, [isChannel, channelId]);
+
 
     return(
         <Box sx={{ display: "flex" }}>
@@ -46,11 +61,11 @@ const Server = () => {
             <PrimaryAppBar/>
 
                 <PrimaryDraw>
-                    <UserServers/>
+                    <UserServers open={false} data={dataCRUD}/>
                 </PrimaryDraw>
 
                 <SecondaryDraw>
-                    <ServerChannels/>
+                    <ServerChannels data={dataCRUD}/>
                 </SecondaryDraw>
 
                 <Main>

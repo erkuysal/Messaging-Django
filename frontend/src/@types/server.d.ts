@@ -13,5 +13,5 @@ export interface Server {
         server: string;
         topic : string;
         owner: number;
-    };
+    }[];
 }
