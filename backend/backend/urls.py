@@ -28,7 +28,7 @@ urlpatterns = [
 
 
 websocket_urlpatterns = [
-    path("ws/test", ChatConsumer.as_asgi()),
+    path("<str:serverId>/<str:channelId>", ChatConsumer.as_asgi()),
 ]
 
 

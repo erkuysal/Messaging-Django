@@ -1,14 +1,16 @@
 import useWebSocket from "react-use-websocket";
 import {Button} from "@mui/material";
 import {useState} from "react";
-
-const socketURL = "ws://127.0.0.1:8000/ws/test";
+import {useParams} from "react-router-dom";
 
 const MessageInterface = () =>
 {
     const [newMessage, setNewMessage] = useState<string[]>([]);
     const [message, setMessage] = useState("");
-    // const [inputValue, setInputValue] = useState("");
+
+    const {serverId, channelId} = useParams();
+
+    const socketURL = channelId ? `ws://127.0.0.1:8000/${serverId}/${channelId}` : null;
 
 
     const { sendJsonMessage } = useWebSocket(socketURL,{
