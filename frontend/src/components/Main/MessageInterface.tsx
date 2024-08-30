@@ -3,19 +3,43 @@ import {Button} from "@mui/material";
 import {useState} from "react";
 import {useParams} from "react-router-dom";
 
-const MessageInterface = () =>
+import {Server} from "../../@types/server";
+
+import useCrud from "../../hooks/useCrud";
+
+interface Message {
+    sender: string;
+    content: string;
+    timestamp: string;
+}
+
+
+const MessageInterface = (msg: Message, index: number) =>
 {
-    const [newMessage, setNewMessage] = useState<string[]>([]);
+    const [newMessage, setNewMessage] = useState<Message[]>([]);
     const [message, setMessage] = useState("");
 
     const {serverId, channelId} = useParams();
 
-    const socketURL = channelId ? `ws://127.0.0.1:8000/${serverId}/${channelId}` : null;
+    const {fetchData} = useCrud<Server>([],`/messages/?channel_id=${channelId}`);
+
+    const socketURL = channelId
+        ? `ws://127.0.0.1:8000/${serverId}/${channelId}`
+        : null;
 
 
     const { sendJsonMessage } = useWebSocket(socketURL,{
-     onOpen: () => {
-        console.log("Connected!");
+     onOpen: async () => {
+         try{
+             const data = await fetchData();
+             setNewMessage([]);
+             setNewMessage(Array.isArray(data) ? data : []);
+             console.log("Connected!");
+             console.log("Chat Reloaded.");
+         }
+         catch (error){
+             console.log("Error!");
+         }
      },
      onClose: () => {
         console.log("Closed!");
@@ -36,7 +60,8 @@ const MessageInterface = () =>
                 {
                     return (
                         <div key={index}>
-                            <p>{msg}</p>
+                            <p>{msg.sender}</p>
+                            <p>{msg.content}</p>
                         </div>
                     )
                 }

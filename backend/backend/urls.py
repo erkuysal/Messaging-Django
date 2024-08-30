@@ -9,11 +9,13 @@ from rest_framework.routers import DefaultRouter
 
 from server.views import CategoryListViewSet, ServerListViewSet
 from chatinator.consumer import ChatConsumer
+from chatinator.views import MessageViewSet
 
 
 router = DefaultRouter()
 router.register("api/server/select", ServerListViewSet)
 router.register("api/server/category", CategoryListViewSet)
+router.register("api/messages", MessageViewSet, basename="messages")
 
 urlpatterns = [
     path('admin/', admin.site.urls),

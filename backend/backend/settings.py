@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     # --------- EXTERNAL APPS ------------
     'accounts',
     'server',
+    'chatinator',
     # -------- PLUG-INS ---------------
     'drf_spectacular',
     'rest_framework',
