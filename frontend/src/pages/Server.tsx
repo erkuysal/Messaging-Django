@@ -69,7 +69,7 @@ const Server = () => {
                 </SecondaryDraw>
 
                 <Main>
-                    <MessageInterface/>
+                    <MessageInterface data={dataCRUD}/>
                 </Main>
         </Box>
     );
