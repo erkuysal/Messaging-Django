@@ -7,6 +7,8 @@ import {Server} from "../../@types/server";
 
 import useCrud from "../../hooks/useCrud";
 
+import ChannelInterface from "./ChannelInterface.tsx";
+
 
 interface ServerChannelProps {
     data: Server[];
@@ -62,6 +64,7 @@ const MessageInterface = (props : ServerChannelProps) =>
 
     return (
         <>
+            <ChannelInterface data={data}/>
             {channelId == undefined
             ? (<Box sx={{ overflow:"hidden", p:{xs: 0}, height:`calc(80vh)`,
                     display:"flex",
