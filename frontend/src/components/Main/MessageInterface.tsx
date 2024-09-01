@@ -1,5 +1,5 @@
 import useWebSocket from "react-use-websocket";
-import {Box, Button, Typography} from "@mui/material";
+import {Avatar, Box, Button, List, ListItem, ListItemAvatar, ListItemText, Typography} from "@mui/material";
 import {useState} from "react";
 import {useParams} from "react-router-dom";
 
@@ -82,9 +82,55 @@ const MessageInterface = (props : ServerChannelProps) =>
                             {data?.[0]?.description ?? "This is our home."}
                         </Typography>
                     </Box>
-            </Box>)
-            : (<>
-                <div>
+            </Box>
+            ) : (
+                <>
+                    <Box sx={{overflow:"hidden", p:0, height:`calc(100-100px)`}}>
+                        <List sx={{width: "100%", bgcolor:"background.paper"}}>
+                            {newMessage.map((msg, index) => {
+                                return (
+                                    <ListItem key={index} alignItems="flex-start">
+                                        <ListItemAvatar>
+                                            <Avatar alt="User Image" />
+                                        </ListItemAvatar>
+
+                                        <ListItemText
+                                            primaryTypographyProps={{fontSize:"12px", variant:"body2"}}
+                                            primary={
+                                                <Typography
+                                                    component="span"
+                                                    variant="body1"
+                                                    color="text.primary"
+                                                    sx={{display:"inline", fontWeight:400}}
+                                                >
+                                                    {msg.sender}
+                                                </Typography>
+                                            }
+                                            secondary={
+                                            <Box>
+                                                <Typography
+                                                    variant="body1"
+                                                    style={{overflow:"visible", whiteSpace:"normal", textOverflow:"clip"}}
+                                                    sx={{display:"inline", lineHeight:1.2, letterSpacing:"-0.2px"}}
+                                                    component="span"
+                                                    color="text.primary"
+                                                >
+                                                    {msg.content}
+                                                </Typography>
+                                            </Box>
+                                            }
+                                        >
+                                        </ListItemText>
+                                    </ListItem>
+                                )
+                            })}
+                        </List>
+
+                    </Box>
+
+
+
+                {/*<div>
                     {newMessage.map(
                         (msg, index) =>
                         {
@@ -108,7 +154,8 @@ const MessageInterface = (props : ServerChannelProps) =>
                         }
                     }
                     > Send </Button>
-                </div></>
+                </div>*/}
+                </>
             )}
         </>
     );
