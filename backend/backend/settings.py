@@ -137,7 +137,8 @@ AUTH_USER_MODEL = 'accounts.Account'
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',  # Default authentication method of Django
+         # 'rest_framework.authentication.SessionAuthentication',  # Default authentication method of Django
+         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
 }
 
