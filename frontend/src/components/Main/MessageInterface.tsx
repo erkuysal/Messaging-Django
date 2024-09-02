@@ -9,6 +9,7 @@ import {Server} from "../../@types/server";
 import useCrud from "../../hooks/useCrud";
 
 import ChannelInterface from "./ChannelInterface.tsx";
+import Scroll from "./Scroll.tsx";
 
 
 interface ServerChannelProps {
@@ -114,7 +115,8 @@ const MessageInterface = (props : ServerChannelProps) =>
             ) : (
                 <>
                     <Box sx={{overflow:"hidden", p:0, height:`calc(100vh - 100px)`}}>
-                        <List sx={{width: "100%", bgcolor:"background.paper"}}>
+                        <Scroll>
+                            <List sx={{width: "100%", bgcolor:"background.paper"}}>
                             {newMessage.map((msg, index) => {
                                 return (
                                     <ListItem key={index} alignItems="flex-start">
@@ -135,7 +137,7 @@ const MessageInterface = (props : ServerChannelProps) =>
                                                 </Typography>
                                             }
                                             secondary={
-                                            <Box>
+                                            <>
                                                 <Typography
                                                     variant="body1"
                                                     style={{overflow:"visible", whiteSpace:"normal", textOverflow:"clip"}}
@@ -145,7 +147,7 @@ const MessageInterface = (props : ServerChannelProps) =>
                                                 >
                                                     {msg.content}
                                                 </Typography>
-                                            </Box>
+                                            </>
                                             }
                                         >
                                         </ListItemText>
@@ -153,6 +155,7 @@ const MessageInterface = (props : ServerChannelProps) =>
                                 )
                             })}
                         </List>
+                        </Scroll>
                     </Box>
 
                     <Box sx={{position:"sticky", bottom:0, width:"100%"}}>
