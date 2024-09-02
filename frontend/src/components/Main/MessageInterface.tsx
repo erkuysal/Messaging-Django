@@ -19,7 +19,7 @@ interface ServerChannelProps {
 interface Message {
     sender: string;
     content: string;
-    timestamp: string;
+    time_stamp: string;
 }
 
 interface SendMessageData {
@@ -91,6 +91,16 @@ const MessageInterface = (props : ServerChannelProps) =>
         }
     };
 
+    function formatTimeStamp(timestamp){
+        const date = new Date(Date.parse(timestamp));
+        const formatted_date = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+     // const formatted_time = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+        const formatted_local = date.toLocaleTimeString([],
+            {hour: '2-digit', minute:'2-digit', hour12:false});
+
+        return `${formatted_date} at ${formatted_local}`
+    }
+
     return (
         <>
             <ChannelInterface data={data}/>
@@ -127,6 +137,7 @@ const MessageInterface = (props : ServerChannelProps) =>
                                         <ListItemText
                                             primaryTypographyProps={{fontSize:"12px", variant:"body2"}}
                                             primary={
+                                            <>
                                                 <Typography
                                                     component="span"
                                                     variant="body1"
@@ -135,6 +146,13 @@ const MessageInterface = (props : ServerChannelProps) =>
                                                 >
                                                     {msg.sender}
                                                 </Typography>
+                                                <Typography component="span"
+                                                            variant="caption"
+                                                            color="textSecondary"
+                                                >
+                                                    {" at "}{formatTimeStamp(msg.time_stamp)}
+                                                </Typography>
+                                            </>
                                             }
                                             secondary={
                                             <>
