@@ -1,7 +1,8 @@
-import useWebSocket from "react-use-websocket";
-import {Avatar, Box, Button, List, ListItem, ListItemAvatar, ListItemText, Typography} from "@mui/material";
+import {Avatar, Box, Button, List, ListItem, ListItemAvatar, ListItemText, TextField, Typography} from "@mui/material";
+import {useTheme} from "@mui/material/styles";
 import {useState} from "react";
 import {useParams} from "react-router-dom";
+import useWebSocket from "react-use-websocket";
 
 import {Server} from "../../@types/server";
 
@@ -20,9 +21,17 @@ interface Message {
     timestamp: string;
 }
 
+interface SendMessageData {
+    type: string;
+    message: string;
+    [key : string] : any;
+}
+
 
 const MessageInterface = (props : ServerChannelProps) =>
 {
+    const theme = useTheme();
+
     const {data} = props;
     const [newMessage, setNewMessage] = useState<Message[]>([]);
     const [message, setMessage] = useState("");
@@ -59,8 +68,27 @@ const MessageInterface = (props : ServerChannelProps) =>
      onMessage: (msg) => {
        const data = JSON.parse(msg.data);
        setNewMessage((prev_msg) =>[...prev_msg, data.new_message]);
+       setMessage("");
      }
  });
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        sendJsonMessage({
+            type:"message",
+            message,
+        } as SendMessageData);
+    }
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if(e.key == "Enter"){
+            e.preventDefault();
+            sendJsonMessage({
+                type:"message",
+                message,
+            } as SendMessageData);
+        }
+    };
 
     return (
         <>
@@ -85,7 +113,7 @@ const MessageInterface = (props : ServerChannelProps) =>
             </Box>
             ) : (
                 <>
-                    <Box sx={{overflow:"hidden", p:0, height:`calc(100-100px)`}}>
+                    <Box sx={{overflow:"hidden", p:0, height:`calc(100vh - 100px)`}}>
                         <List sx={{width: "100%", bgcolor:"background.paper"}}>
                             {newMessage.map((msg, index) => {
                                 return (
@@ -125,36 +153,30 @@ const MessageInterface = (props : ServerChannelProps) =>
                                 )
                             })}
                         </List>
-
                     </Box>
 
-
-
-                {/*<div>
-                    {newMessage.map(
-                        (msg, index) =>
-                        {
-                            return (
-                                <div key={index}>
-                                    <p>{msg.sender}</p>
-                                    <p>{msg.content}</p>
-                                </div>
-                            )
-                        }
-                    )}
-                    <form>
-                        <label> Enter Message: </label>
-                        <input type="text" value={message}
-                               onChange={(e) => setMessage(e.target.value)}
-                        />
-                    </form>
-                    <Button onClick={() =>
-                        {
-                        sendJsonMessage({type:"message", message})
-                        }
-                    }
-                    > Send </Button>
-                </div>*/}
+                    <Box sx={{position:"sticky", bottom:0, width:"100%"}}>
+                        <form
+                            onSubmit={handleSubmit}
+                            style={{
+                                bottom:0, right:0, padding: "1rem",
+                                backgroundColor: theme.palette.background.default, zIndex: 10,
+                            }}
+                        >
+                            <Box sx={{display:"flex"}}>
+                                <TextField
+                                    fullWidth
+                                    multiline
+                                    minRows={1}
+                                    maxRows={4}
+                                    value={message}
+                                    onKeyDown={handleKeyDown}
+                                    onChange={(e) => setMessage(e.target.value)}
+                                    sx={{flexGrow:1}}
+                                />
+                            </Box>
+                        </form>
+                    </Box>
                 </>
             )}
         </>
