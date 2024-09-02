@@ -2,6 +2,8 @@ import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider} fr
 
 import ToggleTheme from "./theme/ToggleTheme";
 
+import {AuthServiceProvider} from "./context/AuthContext.tsx";
+
 import Home from "./pages/Home";
 import Explore from "./pages/Explore";
 import Server from "./pages/Server.tsx";
@@ -22,9 +24,11 @@ const Router = createBrowserRouter(
 const App: React.FC = () => {
 
     return (
-        <ToggleTheme>
-            <RouterProvider router={Router}/>
-        </ToggleTheme>
+        <AuthServiceProvider>
+            <ToggleTheme>
+                <RouterProvider router={Router}/>
+            </ToggleTheme>
+        </AuthServiceProvider>
     )
 };
 
