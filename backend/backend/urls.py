@@ -7,9 +7,12 @@ from django.contrib import admin
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework.routers import DefaultRouter
 
+from accounts.views import AccountViewSet
+
 from server.views import CategoryListViewSet, ServerListViewSet
-from chatinator.consumer import ChatConsumer
+
 from chatinator.views import MessageViewSet
+from chatinator.consumer import ChatConsumer
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -21,6 +24,7 @@ router = DefaultRouter()
 router.register("api/server/select", ServerListViewSet)
 router.register("api/server/category", CategoryListViewSet)
 router.register("api/messages", MessageViewSet, basename="messages")
+router.register("api/account", AccountViewSet, basename="account")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
