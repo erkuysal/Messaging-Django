@@ -2,18 +2,17 @@ import axios from "axios";
 import {useState} from "react";
 
 import { AuthServiceProps } from "../@types/auth-service";
+import {set} from "js-cookie";
 
 
 export function useAuthService(): AuthServiceProps {
-    const [isLoggedIn, setIsLoggedIn] = useState<boolean>( () => {
-        const loggedIn = localStorage.getItem("isLoggedIn")
 
-        if (loggedIn !== null) {
-            return Boolean(loggedIn)
-        } else {
-            return false;
-        }
-    });
+    const getInitialLogValue = () => {
+        const loggedIn = localStorage.getItem("isLoggedIn");
+        return loggedIn !== null && loggedIn === "true";
+    };
+
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(getInitialLogValue())
 
     const get_UserIdFromToken = (access) => {
         const token = access;
@@ -85,5 +84,13 @@ export function useAuthService(): AuthServiceProps {
         }
     }
 
-    return {login, isLoggedIn}
+    const logout = () => {
+        localStorage.removeItem("access_token")
+        localStorage.removeItem("refresh_token")
+        localStorage.removeItem("userID")
+        localStorage.setItem("isLoggedIn", "false")
+        setIsLoggedIn(false)
+    }
+
+    return {login, isLoggedIn, logout}
 }

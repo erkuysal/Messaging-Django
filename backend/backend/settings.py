@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from datetime import timedelta
 
 from dotenv import load_dotenv
 
@@ -172,3 +173,12 @@ CHANNEL_LAYERS = {     # For Production
     },
 }
 """
+# ------------------------ SIMPLE JWT SETTINGS -----------------------
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(seconds=5),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=15),
+}
+
+
+

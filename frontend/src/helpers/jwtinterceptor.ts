@@ -13,11 +13,39 @@ const useAxiosWithInterceptor = (): AxiosInstance => {
         (response) => {
             return response;
         },
-        async(error) =>{
+        async(error) => {
             const originalRequest = error.config;
-            if (error.response?.status === 403){
-                const goRoot = () => navigate("/");
-                goRoot() ;
+            if (error.response?.status === 401 || 403) {
+                const refreshToken = localStorage.getItem("refresh_token");
+                if (refreshToken) {
+                    try
+                    {
+                        const refreshResponse = await axios.post(
+                            `${API_BASE_URL}/token/refresh/`,
+                            {
+                                refresh: refreshToken
+                            }
+                        );
+
+                        const refreshedAccessToken = refreshResponse.data.access;
+                        localStorage.setItem("access_token", refreshedAccessToken);
+                        originalRequest.headers["Authorization"] = `Bearer ${refreshedAccessToken}`;
+
+                        return jwtAxios(originalRequest);
+                    }
+
+                    catch (refreshError)
+
+                    {
+                        navigate("/login");
+                        throw refreshError
+                    }
+
+                }
+                else
+                {
+                    navigate("/login")
+                }
             }
             throw error;
         }
