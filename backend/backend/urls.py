@@ -7,7 +7,7 @@ from django.contrib import admin
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework.routers import DefaultRouter
 
-from accounts.views import AccountViewSet
+from accounts.views import AccountViewSet, JWTCookieTokenObtainView
 
 from server.views import CategoryListViewSet, ServerListViewSet
 
@@ -32,7 +32,7 @@ urlpatterns = [
     # --------- API VIEWS ----------
     path('api/docs/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/docs/schema/ui', SpectacularSwaggerView.as_view()),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/', JWTCookieTokenObtainView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     # --------- MODULE ROUINGS ---------
 
