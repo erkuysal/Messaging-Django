@@ -66,6 +66,7 @@ export function useAuthService(): AuthServiceProps {
                 }, {withCredentials: true}
             );
 
+            console.log(response.data)
             localStorage.setItem("isLoggedIn", "true")
             setIsLoggedIn(true);
 

@@ -180,7 +180,7 @@ CHANNEL_LAYERS = {     # For Production
 # ------------------------ SIMPLE JWT SETTINGS -----------------------
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(seconds=5),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=15),
 
     # Web Token Cookie Settings
