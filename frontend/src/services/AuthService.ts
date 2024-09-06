@@ -14,47 +14,28 @@ export function useAuthService(): AuthServiceProps {
 
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(getInitialLogValue())
 
-    // const get_UserIdFromToken = (access) => {
-    //     const token = access;
-    //
-    //     const tokenParts = token.split(".");
-    //
-    //     const encodedPayload = tokenParts[1];
-    //     const decodedPayload = atob(encodedPayload);
-    //
-    //     const payloadData = JSON.parse(decodedPayload);
-    //
-    //     const userID = payloadData.user_id;
-    //
-    //     return userID;
-    // }
+    const get_UserDetails  = async () => {
+        try {
+            const userID = localStorage.getItem("user_id") // getItem function takes a JSON string as a parameter
+            const response = await axios.get(
+                `http://127.0.0.1:8000/api/account/?user_id=${userID}`,
+                {
+                    withCredentials: true
+                }
+            );
 
-    // const get_UserDetails  = async () => {
-    //     try {
-    //         const userID = localStorage.getItem("userID") // getItem function takes a JSON string as a parameter
-    //         const accessToken = localStorage.getItem("access_token")
-    //
-    //         const response = await axios.get(
-    //             `http://127.0.0.1:8000/api/account/?user_id=${userID}`,
-    //             {
-    //                 headers: {
-    //                     Authorization: `Bearer ${accessToken}`
-    //                 }
-    //             }
-    //         );
-    //
-    //         const userDetails = response.data;
-    //         localStorage.setItem("username", userDetails.username)
-    //         localStorage.setItem("isLoggedIn", "true")
-    //
-    //         setIsLoggedIn(true);
-    //
-    //     } catch(err: any) {
-    //         localStorage.setItem("isLoggedIn", "false")
-    //         setIsLoggedIn(false);
-    //         return err;
-    //     }
-    // }
+            const userDetails = response.data;
+            localStorage.setItem("username", userDetails.username)
+            localStorage.setItem("isLoggedIn", "true")
+
+            setIsLoggedIn(true);
+
+        } catch(err: any) {
+            localStorage.setItem("isLoggedIn", "false")
+            setIsLoggedIn(false);
+            return err;
+        }
+    }
 
     const login = async (username: string, password: string) => {
         try {
@@ -66,9 +47,13 @@ export function useAuthService(): AuthServiceProps {
                 }, {withCredentials: true}
             );
 
-            console.log(response.data)
+            const user_id = response.data.user_id;
+
             localStorage.setItem("isLoggedIn", "true")
+            localStorage.setItem("user_id", user_id)
             setIsLoggedIn(true);
+
+            get_UserDetails()
 
         } catch(err: any) {
             localStorage.setItem("isLoggedIn", "false")
@@ -80,6 +65,8 @@ export function useAuthService(): AuthServiceProps {
 
     const logout = () => {
         localStorage.setItem("isLoggedIn", "false")
+        localStorage.removeItem("user_id")
+        localStorage.removeItem("username")
         setIsLoggedIn(false)
     }
 

@@ -1,13 +1,16 @@
 import axios, {AxiosInstance} from "axios";
 import {useNavigate} from "react-router-dom";
 
+import { useAuthService } from "../services/AuthService.ts";
 import {BASE_URL} from "../config.ts";
 
 const API_BASE_URL = BASE_URL;
 
+
 const useAxiosWithInterceptor = (): AxiosInstance => {
     const jwtAxios = axios.create({ baseURL: API_BASE_URL });
     const navigate = useNavigate();
+    const { logout } = useAuthService();
 
     jwtAxios.interceptors.response.use(
         (response) => {
@@ -16,38 +19,24 @@ const useAxiosWithInterceptor = (): AxiosInstance => {
         async(error) => {
             const originalRequest = error.config;
             if (error.response?.status === 401 || 403) {
-                const refreshToken = localStorage.getItem("refresh_token");
-                if (refreshToken) {
-                    try
-                    {
-                        const refreshResponse = await axios.post(
-                            `${API_BASE_URL}/token/refresh/`,
-                            {
-                                refresh: refreshToken
-                            }
-                        );
+                axios.defaults.withCredentials = true;
 
-                        const refreshedAccessToken = refreshResponse.data.access;
-                        localStorage.setItem("access_token", refreshedAccessToken);
-                        originalRequest.headers["Authorization"] = `Bearer ${refreshedAccessToken}`;
+                try {
+                    const response = await axios.post(
+                        `${API_BASE_URL}/token/refresh/`,
+                    );
 
+                    if (response.status === 200) {
                         return jwtAxios(originalRequest);
                     }
 
-                    catch (refreshError)
-
-                    {
-                        navigate("/login");
-                        throw refreshError
-                    }
-
-                }
-                else
-                {
-                    navigate("/login")
+                } catch (refreshError) {
+                    const goLogin= () => navigate("/login");
+                    logout();
+                    goLogin();
+                    return Promise.reject(refreshError);
                 }
             }
-            throw error;
         }
     )
     return jwtAxios;

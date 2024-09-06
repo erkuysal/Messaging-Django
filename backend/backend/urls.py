@@ -7,17 +7,12 @@ from django.contrib import admin
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework.routers import DefaultRouter
 
-from accounts.views import AccountViewSet, JWTCookieTokenObtainView
+from accounts.views import AccountViewSet, JWTCookieTokenObtainView, JWTCookieTokenRefreshView
 
 from server.views import CategoryListViewSet, ServerListViewSet
 
 from chatinator.views import MessageViewSet
 from chatinator.consumer import ChatConsumer
-
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
 
 
 router = DefaultRouter()
@@ -33,7 +28,7 @@ urlpatterns = [
     path('api/docs/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/docs/schema/ui', SpectacularSwaggerView.as_view()),
     path('api/token/', JWTCookieTokenObtainView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/refresh/', JWTCookieTokenRefreshView.as_view(), name='token_refresh'),
     # --------- MODULE ROUINGS ---------
 
 ] + router.urls
