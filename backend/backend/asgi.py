@@ -8,12 +8,13 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 asgi_application = get_asgi_application()
 
 from . import urls
+from chatinator.middleware import JWTAuthMiddleware
 
 # application = get_asgi_application()
 application = ProtocolTypeRouter(
     {
         "http": get_asgi_application(),
-        "websocket": URLRouter(urls.websocket_urlpatterns),
+        "websocket": JWTAuthMiddleware(URLRouter(urls.websocket_urlpatterns)),
     }
 )
 
