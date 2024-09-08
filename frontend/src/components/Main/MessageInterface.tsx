@@ -1,25 +1,17 @@
-import {Avatar, Box, Button, List, ListItem, ListItemAvatar, ListItemText, TextField, Typography} from "@mui/material";
+import {Avatar, Box, List, ListItem, ListItemAvatar, ListItemText, TextField, Typography} from "@mui/material";
 import {useTheme} from "@mui/material/styles";
-import {useState} from "react";
 import {useParams} from "react-router-dom";
-import useWebSocket from "react-use-websocket";
 
 import {Server} from "../../@types/server";
-
-import useCrud from "../../hooks/useCrud";
 
 import ChannelInterface from "./ChannelInterface.tsx";
 import Scroll from "./Scroll.tsx";
 
+import useChatServiceWS from "../../services/chatService.ts";
+
 
 interface ServerChannelProps {
     data: Server[];
-}
-
-interface Message {
-    sender: string;
-    content: string;
-    time_stamp: string;
 }
 
 interface SendMessageData {
@@ -34,47 +26,12 @@ const MessageInterface = (props : ServerChannelProps) =>
     const theme = useTheme();
 
     const {data} = props;
-    const [newMessage, setNewMessage] = useState<Message[]>([]);
-    const [message, setMessage] = useState("");
 
     const {serverId, channelId} = useParams();
     const server_name = data?.[0]?.name ?? "Server";
 
-    const {fetchData} = useCrud<Server>([],`/messages/?channel_id=${channelId}`);
-
-    const socketURL = channelId
-        ? `ws://127.0.0.1:8000/${serverId}/${channelId}`
-        : null;
-
-
-    const { sendJsonMessage } = useWebSocket(socketURL,{
-     onOpen: async () => {
-         try{
-             const data = await fetchData();
-             setNewMessage([]);
-             setNewMessage(Array.isArray(data) ? data : []);
-             console.log("Connected!");
-             console.log("Chat Reloaded.");
-         }
-         catch (error){
-             console.log("Error!");
-         }
-     },
-     onClose: (event: CloseEvent) => {
-        if (event.code === 4001) {
-            console.log("Authentication Error!");
-        }
-         console.log("Closed!");
-     },
-     onError: () => {
-        console.log("Error!");
-     },
-     onMessage: (msg) => {
-       const data = JSON.parse(msg.data);
-       setNewMessage((prev_msg) =>[...prev_msg, data.new_message]);
-       setMessage("");
-     }
- });
+    const {newMessage, sendJsonMessage, message, setMessage} =
+        useChatServiceWS(channelId || '', serverId||'');
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
