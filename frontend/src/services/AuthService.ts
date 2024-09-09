@@ -1,12 +1,14 @@
 import axios from "axios";
 import {useState} from "react";
+import {useNavigate} from "react-router-dom";
 
 import { AuthServiceProps } from "../@types/auth-service";
-import {set} from "js-cookie";
 import {BASE_URL} from "../config.ts";
 
 
 export function useAuthService(): AuthServiceProps {
+
+    const navigate = useNavigate();
 
     const getInitialLogValue = () => {
         const loggedIn = localStorage.getItem("isLoggedIn");
@@ -74,11 +76,21 @@ export function useAuthService(): AuthServiceProps {
         }
     }
 
-    const logout = () => {
+    const logout = async () => {
         localStorage.setItem("isLoggedIn", "false")
         localStorage.removeItem("user_id")
         localStorage.removeItem("username")
         setIsLoggedIn(false)
+
+        navigate("/login")
+
+        try {
+             await axios.post(
+                `${BASE_URL}/logout/`, {}, {withCredentials: true}
+            )
+        } catch(refreshError) {
+            return Promise.reject(refreshError)
+        }
     }
 
     return {login, isLoggedIn, logout, refreshAccessToken}
