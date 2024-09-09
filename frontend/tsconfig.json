@@ -5,7 +5,7 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
-
+    "esModuleInterop": true,
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
@@ -13,13 +13,26 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": [
+    "src",
+    "src/**/*.ts",
+    "components/**/*.ts",
+    "index.d.cts",
+  ],
+  "exclude": [
+    "node_modules",  // Ensure node_modules is excluded
+    "dist"           // Exclude build/dist directory if applicable
+  ],
+  "references": [{ "path": "./tsconfig.node.json" }
+  ],
+    "files": [
+    "src/index.ts",
+    "types/index.d.cts"  // Directly include the .d.cts file
+  ],
 }

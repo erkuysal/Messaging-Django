@@ -33,7 +33,7 @@ declare module "@mui/material/styles" {
 export const createMuiTheme = (mode: "light" | "dark") => {
   let theme = createTheme({
       typography:{
-        fontFamily: ["Silkscreen", "sans-serif", "VT323", "monospace"].join(","),
+        fontFamily: ["Oswald", "sans-serif"].join(","),
         body1:{
           fontSize: "1.1rem",
           fontWeight: 500,
@@ -46,6 +46,13 @@ export const createMuiTheme = (mode: "light" | "dark") => {
             letterSpacing: "-0.5px",
             color: "#333",
         },
+        body3:{
+            fontFamily: ["VT323","monospace"].join(","),
+            fontSize: "1rem",
+            fontWeight: 500,
+            letterSpacing: "-0.25px",
+            color: "#333",
+        }
       },
       // COMPONENTS
       primaryAppBar: {

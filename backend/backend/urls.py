@@ -7,7 +7,7 @@ from django.contrib import admin
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework.routers import DefaultRouter
 
-from accounts.views import AccountViewSet, JWTCookieTokenObtainView, JWTCookieTokenRefreshView, LogOutAPIView
+from accounts.views import AccountViewSet, JWTCookieTokenObtainView, JWTCookieTokenRefreshView, LogOutAPIView, RegisterView
 
 from server.views import CategoryListViewSet, ServerListViewSet
 
@@ -30,6 +30,7 @@ urlpatterns = [
     path('api/token/', JWTCookieTokenObtainView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', JWTCookieTokenRefreshView.as_view(), name='token_refresh'),
     path('api/logout/', LogOutAPIView.as_view(), name='logout'),
+    path('api/register/', RegisterView.as_view(), name='logout'),
     # --------- MODULE ROUINGS ---------
 
 ] + router.urls
@@ -42,4 +43,5 @@ websocket_urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

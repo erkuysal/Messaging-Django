@@ -2,6 +2,8 @@ import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 
 import { useAuthServiceContext } from "../context/AuthContext";
+import Container from "@mui/material/Container";
+import {Box, Button, TextField, Typography} from "@mui/material";
 
 
 const Login = () => {
@@ -14,34 +16,93 @@ const Login = () => {
             username: "",
             password: "",
         },
-        onSubmit: async (values) => {
-            const {username, password} = values;
-            const res = await login(username, password);
+        validate: (values) => {
+            const errors: Partial<typeof values> = {} as Partial<typeof values>;
 
-            if (res) {
-                console.log(res);
-            } else {
-                navigate("/testlogin");
+            if (!values.username) {
+                errors.username = "Required";
             }
+            if (!values.password) {
+                errors.password = "Required";
+            }
+
+            return errors;
         },
+        onSubmit: async (values) => {
+            const { username, password } = values;
+
+            try {
+                const status = await login(username, password);
+
+                if (status === 200) {
+                    navigate("/");
+
+                } else if (status === 401) {
+                    // Registration successful, navigate to login
+                    formik.setErrors({
+                        username: "Invalid username or password",
+                        password: "Invalid username or password",
+                    });
+                } else {
+                    formik.setErrors({
+                        username: "An unknown error occurred",
+                        password: "Please try again",
+                    });
+                }
+            } catch (error) {
+                formik.setErrors({
+                    username: "Login failed",
+                    password: "Please try again",
+                });
+            }
+        }
     });
 
     return (
-        <div>
-            <h1>Login</h1>
-            <form onSubmit={formik.handleSubmit}>
+        <Container component="main" maxWidth="xs">
+            <Box sx={{marginTop: 8, display: "flex", alignItems: "center", flexDirection: "column"}}>
+                <Typography variant="h5" noWrap component="h1"
+                            sx={{
+                                fontWeight: "fontWeightBold",
+                                pb: 2,
+                            }}
+                >
+                    Login
+                </Typography>
 
-                <label>username</label>
-                <input id="username" name="username" type="text"
-                       value={formik.values.username} onChange={formik.handleChange}/>
+                <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt:1 }}>
 
-                <label>password</label>
-                <input id="password" name="password" type="password"
-                       value={formik.values.password} onChange={formik.handleChange}/>
 
-                <button type="submit">Login</button>
-            </form>
-        </div>
+                    <TextField
+                        autoFocus
+                        fullWidth
+                        id="username" name="username" label="username"
+                        value={formik.values.username}
+                        onChange={formik.handleChange}
+                        error={!!formik.touched.username && !!formik.errors.username}
+                        helperText={formik.touched.username && formik.errors.username}
+                    >
+                    </TextField>
+
+
+                    <TextField
+                        fullWidth
+                        margin="normal"
+                        id="password" name="password" type="password" label="password"
+                        value={formik.values.password}
+                        onChange={formik.handleChange}
+                        sx={{ mt:2 }}
+                        error={!!formik.touched.password && !!formik.errors.password}
+                        helperText={formik.touched.password && formik.errors.password}
+                    >
+                    </TextField>
+
+                    <Button disableElevation type="submit" fullWidth variant="contained"
+                            sx={{mt:1 , mb: 2}}
+                    >Next</Button>
+                </Box>
+            </Box>
+        </Container>
     )
 };
 

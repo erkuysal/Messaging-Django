@@ -40,6 +40,25 @@ export function useAuthService(): AuthServiceProps {
         }
     }
 
+    const register = async (username: string, password: string) => {
+        try {
+            const response = await axios.post(
+                "http://127.0.0.1:8000/api/register/",
+                {
+                    username,
+                    password,
+                }, {withCredentials: true}
+            );
+
+            return response.status
+
+        } catch(err: any) {
+
+            return err.response.status;
+        }
+    }
+
+
     const login = async (username: string, password: string) => {
         try {
             const response = await axios.post(
@@ -56,7 +75,7 @@ export function useAuthService(): AuthServiceProps {
             localStorage.setItem("user_id", user_id)
             setIsLoggedIn(true);
 
-            get_UserDetails()
+            await get_UserDetails()
 
         } catch(err: any) {
             localStorage.setItem("isLoggedIn", "false")
@@ -93,5 +112,5 @@ export function useAuthService(): AuthServiceProps {
         }
     }
 
-    return {login, isLoggedIn, logout, refreshAccessToken}
+    return {register, login, isLoggedIn, logout, refreshAccessToken}
 }

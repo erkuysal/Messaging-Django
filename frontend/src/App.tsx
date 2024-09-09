@@ -11,6 +11,7 @@ import Explore from "./pages/Explore";
 import Server from "./pages/Server.tsx";
 import Login from "./pages/Login.tsx";
 import TestLogin from "./pages/testLogin";
+import Register from "./pages/Register.tsx";
 
 
 const App: React.FC = () => {
@@ -27,6 +28,8 @@ const App: React.FC = () => {
                         <Route path={"/explore/:categoryName"} element={<Explore />} />
 
                         <Route path={"login"} element={<Login />}/>
+
+                        <Route path={"register"} element={<Register />}/>
 
                         <Route path={"testlogin"} element={
                             <ProtectedRoute>
